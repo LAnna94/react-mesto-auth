@@ -1,0 +1,18 @@
+.popup__info-tip-capture {
+  max-width: 358px;
+  font-family: 'Inter', Arial, sans-serif;
+  font-style: normal;
+  font-weight: 900;
+  font-size: 24px;
+  line-height: 29px;
+  text-align: center;
+  color: #000000;
+  margin: 0 auto;
+}
+
+@media screen and (max-width: 767px) {
+  .popup__info-tip-capture {
+    font-size: 20px;
+    line-height: 24px;
+  }
+}

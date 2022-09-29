@@ -1,0 +1,11 @@
+.auth-form__save-button {
+  background: #FFFFFF;
+  color: #000000;
+}
+
+@media screen and (max-width: 767px) {
+  .auth-form__save-button {
+    width: 100%;
+    margin: 0;
+  }
+}

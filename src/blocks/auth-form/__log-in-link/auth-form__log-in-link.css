@@ -1,0 +1,29 @@
+.auth-form__log-in-link {
+  font-family: 'Inter', Arial, sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 17px;
+  text-align: center;
+  color: #FFFFFF;
+  text-decoration: none;
+  background-color: transparent;
+  margin: 0;
+  width: 358px;
+  padding: 15px 0 0;
+  display: block;
+  transition: 0.5s;
+}
+
+.auth-form__log-in-link:hover {
+  opacity: 0.6;
+  cursor: pointer;
+}
+
+@media screen and (max-width: 767px) {
+  .auth-form__log-in-link {
+    width: 100%;
+    margin: 0;
+    padding: 20px 0 0;
+  }
+}
