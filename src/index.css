@@ -54,4 +54,6 @@
 @import url(blocks/popup/__info-tip-container/popup__info-tip-container.css);
 @import url(blocks/popup/__info-tip-picture/popup__info-tip-picture.css);
 @import url(blocks/popup/__info-tip-capture/popup__info-tip-capture.css);
-@import url(blocks/header/__nav-link/header__nav-link.css);
+@import url(blocks/header/__navbar/header__navbar.css);
+@import url(blocks/header/__nav-item/header__nav-item.css);
+@import url(blocks/header/__nav-button/header__nav-button.css);

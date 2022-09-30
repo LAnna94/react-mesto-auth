@@ -1,16 +1,17 @@
-.header__nav-link {
+.header__nav-button {
   font-family: 'Inter', 'Arial', sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 18px;
   line-height: 22px;
-  text-decoration: none;
   color: #FFFFFF;
   padding-top: 10px;
   transition: 0.5s;
+  border: none;
+  background-color: #000000;
 }
 
-.header__nav-link:hover {
+.header__nav-button:hover {
   opacity: 0.6;
   cursor: pointer;
 }

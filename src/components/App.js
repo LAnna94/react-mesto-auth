@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Redirect, Route, Switch } from 'react-router-dom'
+import { Redirect, Route, Switch, useHistory } from 'react-router-dom'
 import '../index.css';
 import Header from './Header';
 import Main from './Main';
@@ -14,6 +14,7 @@ import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
 import AddPlacePopup from './AddPlacePopup';
+import * as auth from '../utils/auth.js'
 
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
   const [currentUser, setCurrentUser] = useState({})
   const [cards, setCards] = useState([]);
   const [loggedIn, setLoggedIn] = useState(false);
+  const history = useHistory()
 
   useEffect(() => {
     Promise.all([
@@ -109,22 +111,53 @@ function App() {
       .finally(() => closeAllPopups())
   }
 
+  const handleLogin = () => {
+    setLoggedIn(true)
+  }
+
+  const tokenCheck = () => {
+    const jwt = localStorage.getItem('jwt');
+
+    if (!jwt) {
+      return
+    }
+
+    auth.getContent(jwt)
+      .then((res) => {
+        if (res) {
+          handleLogin();
+          history.push('/')
+        }
+      })
+      .catch(err => console.log(err))
+  }
+
+  useEffect(() => {
+    tokenCheck()
+  }, []);
+
+  const onSignOut = () => {
+    localStorage.removeItem('jwt');
+    setLoggedIn(false);
+    history.push('/sign-in')
+  }
+
   return (
     <div className="App">
       <CurrentUserContext.Provider value={currentUser}>
-        <Header />
+        <Header onSignOut={onSignOut} />
         <Switch>
           <ProtectedRoute
             exact path="/"
             loggedIn={loggedIn}
             component={Main}
-              cards={cards}
-              onCardLike={handleCardLike}
-              onCardDelete={handleCardDelete}
-              onEditAvatar={handleEditAvatarClick}
-              onEditProfile={handleEditProfileClick}
-              onAddPlace={handleAddPlaceClick}
-              onCardClick={handleCardClick}
+            cards={cards}
+            onCardLike={handleCardLike}
+            onCardDelete={handleCardDelete}
+            onEditAvatar={handleEditAvatarClick}
+            onEditProfile={handleEditProfileClick}
+            onAddPlace={handleAddPlaceClick}
+            onCardClick={handleCardClick}
           />
 
           <Route path='/sign-up'>
@@ -132,7 +165,7 @@ function App() {
           </Route>
 
           <Route path='/sign-in'>
-            <Login />
+            <Login handleLogin={handleLogin} />
           </Route>
 
           <Route>
