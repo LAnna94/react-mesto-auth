@@ -1,20 +1,20 @@
 import logo from '../images/logo.svg';
 import { Route, Switch, Link } from 'react-router-dom'
 
-function Header({ children, onSignOut }) {
+function Header({ onSignOut, email }) {
   return (
     <header className="header">
       <img src={logo} alt="лого" className="header__logo" />
 
       <Switch>
         <Route path="/sign-up">
-          <Link to="/sign-in" className="header__nav-link">
+          <Link to="/sign-in" className="header__nav-button">
             Войти
           </Link>
         </Route>
 
         <Route path="/sign-in">
-          <Link to="/sign-up" className="header__nav-link">
+          <Link to="/sign-up" className="header__nav-button">
             Регистрация
           </Link>
         </Route>
@@ -22,7 +22,7 @@ function Header({ children, onSignOut }) {
         <Route exact path="/">
           <ul className="header__navbar">
             <li>
-              <div className="header__nav-item">Email</div>
+              <div className="header__nav-item">{email}</div>
             </li>
             <li>
               <button onClick={onSignOut} className="header__nav-button">

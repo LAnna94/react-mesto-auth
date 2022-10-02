@@ -14,7 +14,8 @@ import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
 import AddPlacePopup from './AddPlacePopup';
-import * as auth from '../utils/auth.js'
+import * as auth from '../utils/auth.js';
+import InfoTooltip from './InfoTooltip';
 
 
 function App() {
@@ -27,7 +28,13 @@ function App() {
   const [currentUser, setCurrentUser] = useState({})
   const [cards, setCards] = useState([]);
   const [loggedIn, setLoggedIn] = useState(false);
-  const history = useHistory()
+  const [email, setEmail] = useState('');
+  const history = useHistory();
+  const [isInfoPopupOpen, setIsInfoPopupOpen] = useState(false)
+  const [infoMessage, setInfoMessage] = useState({
+    image: '',
+    message: ''
+  });
 
   useEffect(() => {
     Promise.all([
@@ -71,6 +78,10 @@ function App() {
     setIsAddPlacePopupOpen(true);
   }
 
+  const handleInfoPopup = () => {
+    setIsInfoPopupOpen(true);
+  }
+
   const handleCardClick = (card) => {
     setSelectedCard(card);
     setIsPhotoPopupOpen(true)
@@ -82,6 +93,7 @@ function App() {
     setIsAddPlacePopupOpen(false);
     setIsPhotoPopupOpen(false);
     setSelectedCard({});
+    setIsInfoPopupOpen(false);
   }
 
   const handleUpdateUser = (userData) => {
@@ -115,7 +127,7 @@ function App() {
     setLoggedIn(true)
   }
 
-  const tokenCheck = () => {
+  const onLogin = () => {
     const jwt = localStorage.getItem('jwt');
 
     if (!jwt) {
@@ -125,15 +137,16 @@ function App() {
     auth.getContent(jwt)
       .then((res) => {
         if (res) {
+          setEmail(res.data.email);
           handleLogin();
           history.push('/')
         }
       })
-      .catch(err => console.log(err))
+      .catch((err) => console.log(err))
   }
 
   useEffect(() => {
-    tokenCheck()
+    onLogin()
   }, []);
 
   const onSignOut = () => {
@@ -145,7 +158,7 @@ function App() {
   return (
     <div className="App">
       <CurrentUserContext.Provider value={currentUser}>
-        <Header onSignOut={onSignOut} />
+        <Header onSignOut={onSignOut} email={email} />
         <Switch>
           <ProtectedRoute
             exact path="/"
@@ -161,11 +174,11 @@ function App() {
           />
 
           <Route path='/sign-up'>
-            <Register />
+            <Register infoMessage={setInfoMessage} infoPopup={handleInfoPopup} />
           </Route>
 
           <Route path='/sign-in'>
-            <Login handleLogin={handleLogin} />
+            <Login handleLogin={handleLogin} infoMessage={setInfoMessage} infoPopup={handleInfoPopup} />
           </Route>
 
           <Route>
@@ -192,6 +205,12 @@ function App() {
           card={selectedCard}
           onClose={closeAllPopups}
           isOpen={isPhotoPopupOpen} />
+
+        <InfoTooltip
+          isOpen={isInfoPopupOpen}
+          onClose={closeAllPopups}
+          infoMessage={infoMessage} />
+
       </CurrentUserContext.Provider>
     </div>
   );

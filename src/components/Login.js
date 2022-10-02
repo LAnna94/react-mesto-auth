@@ -1,47 +1,51 @@
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import * as auth from '../utils/auth.js'
+import * as auth from '../utils/auth.js';
+import errImage from '../images/errImage.png'
 
-function Login({ handleLogin }) {
+function Login({ handleLogin, infoMessage, infoPopup }) {
   const history = useHistory();
-  const [state, setState] = useState({
-    email: '',
-    password: ''
-  });
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
-  const handleChange = (evt) => {
-    const { name, value } = evt.target;
-    setState({
-      ...state,
-      [name]: value
-    })
+  const handleEmail = (evt) => {
+    setEmail(evt.target.value);
   }
 
-  const handleSubmit = (evt) => {
+  const handlePassword = (evt) => {
+    setPassword(evt.target.value);
+  }
+
+  const onLogin = (evt) => {
     evt.preventDefault();
 
-    if (!state.email || !state.password) {
-      return
+    if (!email || !password) {
+      return;
     }
 
-    auth.authorize(state.email, state.password)
+    auth.authorize(email, password)
       .then((data) => {
         if (data.token) {
-          setState({
-            email: '',
-            password: ''
-          })
-          handleLogin()
+          setEmail('');
+          setPassword('');
+          handleLogin();
           history.push('/')
         }
       })
-      .catch(err => console.log(err))
+      .catch((err) => {
+        infoPopup()
+        infoMessage({
+          image: errImage,
+          message: 'Что-то пошло не так! Попробуйте ещё раз.'
+        })
+        console.log(err);
+      })
   }
 
   return (
     <div className="register">
       <h2 className="register__title">Вход</h2>
-      <form name="register" onSubmit={handleSubmit} className="profile-form auth-form" noValidate>
+      <form name="register" onSubmit={onLogin} className="profile-form auth-form" noValidate>
         <fieldset className="profile-form__input-container auth-form__input-container">
           <input
             type="text"
@@ -52,8 +56,8 @@ function Login({ handleLogin }) {
             minLength="2"
             maxLength="30"
             required
-            value={state.email}
-            onChange={handleChange}
+            value={email}
+            onChange={handleEmail}
           />
           <span className="email-input-error profile-form__input-error"></span>
           <input
@@ -63,8 +67,8 @@ function Login({ handleLogin }) {
             placeholder="Пароль"
             className="auth-form__input auth-form__input_type_password"
             required
-            value={state.password}
-            onChange={handleChange}
+            value={password}
+            onChange={handlePassword}
           />
           <span className="password-input-error profile-form__input-error"></span>
         </fieldset>

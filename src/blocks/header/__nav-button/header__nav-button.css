@@ -9,6 +9,7 @@
   transition: 0.5s;
   border: none;
   background-color: #000000;
+  text-decoration: none;
 }
 
 .header__nav-button:hover {

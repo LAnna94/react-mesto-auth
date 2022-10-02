@@ -1,38 +1,39 @@
 import { Link, useHistory } from 'react-router-dom';
 import { useState } from 'react';
 import * as auth from '../utils/auth.js'
+import successfully from '../images/successfully.png';
+import errImage from '../images/errImage.png'
 
-function Register() {
+function Register({ infoPopup, infoMessage }) {
   const history = useHistory();
-  const [state, setState] = useState({
-    email: '',
-    password: ''
-  })
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
-  const handleChange = (evt) => {
-    const { name, value } = evt.target;
-    setState({
-      ...state,
-      [name]: value
-    })
+  const handleEmail = (evt) => {
+    setEmail(evt.target.value);
   }
 
-  const handleSubmit = (e) => {
+  const handlePassword = (evt) => {
+    setPassword(evt.target.value);
+  }
+
+  const onRegister = (e) => {
     e.preventDefault();
 
-    const { email, password } = state;
     auth.register(email, password)
       .then((res) => {
         if (res) {
-          setState({
-            ...state,
-            message: 'успех'
+          infoPopup();
+          infoMessage({
+            image: successfully,
+            message: 'Вы успешно зарегистрировались!'
           })
           history.push('/sign-in')
         } else {
-          setState({
-            ...state,
-            message: 'что-то пошло не так'
+          infoPopup();
+          infoMessage({
+            image: errImage,
+            message: 'Что-то пошло не так! Попробуйте ещё раз.'
           })
         }
       })
@@ -42,7 +43,7 @@ function Register() {
   return (
     <div className="register">
       <h2 className="register__title">Регистрация</h2>
-      <form name="register" onSubmit={handleSubmit} className="profile-form auth-form" noValidate>
+      <form name="register" onSubmit={onRegister} className="profile-form auth-form" noValidate>
         <fieldset className="profile-form__input-container auth-form__input-container">
           <input
             type="text"
@@ -53,8 +54,8 @@ function Register() {
             minLength="2"
             maxLength="30"
             required
-            value={state.email}
-            onChange={handleChange} />
+            value={email}
+            onChange={handleEmail} />
           <span className="email-input-error profile-form__input-error"></span>
           <input
             type="password"
@@ -63,8 +64,8 @@ function Register() {
             placeholder="Пароль"
             className="auth-form__input auth-form__input_type_password"
             required
-            value={state.password}
-            onChange={handleChange}
+            value={password}
+            onChange={handlePassword}
           />
           <span className="password-input-error profile-form__input-error"></span>
         </fieldset>
