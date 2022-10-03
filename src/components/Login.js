@@ -27,7 +27,6 @@ function Login({ handleLogin, infoMessage, infoPopup }) {
       .then((data) => {
         if (data.token) {
           setEmail('');
-          setPassword('');
           handleLogin();
           history.push('/')
         }
