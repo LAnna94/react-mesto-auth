@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
 import PopupWithForm from "./PopupWithForm";
 
 function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
@@ -14,6 +14,11 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
     })
 
   }
+
+  useEffect(() => {
+    placeUrlRef.current.value = '';
+    placeNameRef.current.value = '';
+  }, [isOpen])
 
   return (
     <PopupWithForm
