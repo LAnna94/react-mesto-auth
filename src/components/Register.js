@@ -31,7 +31,6 @@ function Register({ infoPopup, infoMessage }) {
       })
       .catch((err) => {
         infoPopup();
-        infoPopup();
         infoMessage({
           image: errImage,
           message: 'Что-то пошло не так! Попробуйте ещё раз.'
