@@ -22,22 +22,21 @@ function Register({ infoPopup, infoMessage }) {
 
     auth.register(email, password)
       .then((res) => {
-        if (res) {
           infoPopup();
           infoMessage({
             image: successfully,
             message: 'Вы успешно зарегистрировались!'
           })
           history.push('/sign-in')
-        } else {
-          infoPopup();
-          infoMessage({
-            image: errImage,
-            message: 'Что-то пошло не так! Попробуйте ещё раз.'
-          })
-        }
       })
-      .catch(err => console.log(err))
+      .catch((err) => {
+        infoPopup();
+        infoPopup();
+        infoMessage({
+          image: errImage,
+          message: 'Что-то пошло не так! Попробуйте ещё раз.'
+        })
+        console.log(err)})
   }
 
   return (
